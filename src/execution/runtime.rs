@@ -172,12 +172,14 @@ pub fn stack_unwind(stack: &mut Vec<Value>, sp: usize, arity: usize) -> Result<(
 
 #[cfg(test)]
 mod tests {
+    use anyhow::Result;
+
     use crate::execution::value::Value;
 
     use super::Runtime;
 
     #[test]
-    fn execute_i32_add() -> Result<(), anyhow::Error> {
+    fn execute_i32_add() -> Result<()> {
         let wasm = wat::parse_file("src/fixtures/func_add.wat")?;
         let mut runtime = Runtime::instantiate(wasm)?;
         let tests = vec![(2, 3, 5), (10, 5, 15), (1, 1, 2)];
@@ -191,7 +193,7 @@ mod tests {
     }
 
     #[test]
-    fn not_found_export_function() -> Result<(), anyhow::Error> {
+    fn not_found_export_function() -> Result<()> {
         let wasm = wat::parse_file("src/fixtures/func_add.wat")?;
         let mut runtime = Runtime::instantiate(wasm)?;
         let result = runtime.call("foooooo", vec![]);
@@ -200,7 +202,7 @@ mod tests {
     }
 
     #[test]
-    fn func_call() -> Result<(), anyhow::Error> {
+    fn func_call() -> Result<()> {
         let wasm = wat::parse_file("src/fixtures/func_call.wat")?;
         let mut runtime = Runtime::instantiate(wasm)?;
         let tests = vec![(2, 4), (10, 20), (1, 2)];
